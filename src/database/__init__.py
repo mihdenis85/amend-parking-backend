@@ -1,3 +1,3 @@
-from src.database.models.parking_slot import ParkingSpaceLog
+from src.database.models.parking_space_log import ParkingSpaceLog
 
 MODELS = [ParkingSpaceLog]
