@@ -28,7 +28,16 @@ class Service:
         car_make: str,
         license_plate: str,
     ) -> ParkingSpaceLog:
-        if await Repository.get_parking_space_log_by_place_number(place_number) is not None:
+        if place_number < 1 or place_number > settings.PARKING_SLOTS_COUNT:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid place number",
+            )
+
+        if (
+            await Repository.get_parking_space_log_by_place_number(place_number)
+            is not None
+        ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Parking space is already occupied",
