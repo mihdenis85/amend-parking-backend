@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     DB_NAME: str = "ParkingService"
 
     PARKING_SERVICE_API_KEY: str = Field(...)
+    PARKING_SLOTS_COUNT: int = 52
 
     model_config = SettingsConfigDict(env_file=".env")
 

@@ -4,8 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.settings import settings
+from src.api.routes import router
 from src.database.db import initialize_database
+from src.settings import settings
 
 logging.basicConfig(
     format=settings.LOGGING_FORMAT,
@@ -24,7 +25,7 @@ async def lifespan(_: FastAPI):
     logger.info("Application shutdown")
 
 
-ROUTERS = []
+ROUTERS = [router]
 
 app = FastAPI(
     lifespan=lifespan,
