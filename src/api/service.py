@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime, timezone
+import random
 
 from fastapi import HTTPException, status
 
@@ -22,30 +23,26 @@ class Service:
 
     @staticmethod
     async def add_parking_space_log(
-        place_number: int,
         first_name: str,
         last_name: str,
         car_make: str,
         license_plate: str,
     ) -> ParkingSpaceLog:
-        if place_number < 1 or place_number > settings.PARKING_SLOTS_COUNT:
+        occupied_spaces = await Repository.get_occupied_spaces()
+        if len(occupied_spaces) >= settings.PARKING_SLOTS_COUNT:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid place number",
+                detail="No free parking spaces available",
             )
 
-        if (
-            await Repository.get_parking_space_log_by_place_number(place_number)
-            is not None
-        ):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Parking space is already occupied",
-            )
-
+        occupied_place_numbers = {space.place_number for space in occupied_spaces}
+        all_places = set(range(1, settings.PARKING_SLOTS_COUNT + 1))
+        available_places = list(all_places - occupied_place_numbers)
+        selected_place = random.choice(available_places)
+        
         parking_space_log = ParkingSpaceLog(
             log_id=uuid.uuid4(),
-            place_number=place_number,
+            place_number=selected_place,
             first_name=first_name,
             last_name=last_name,
             car_make=car_make,

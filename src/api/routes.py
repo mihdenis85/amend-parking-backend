@@ -41,10 +41,9 @@ async def park_car(body: AddParkingSpaceLogSchema):
         The parking space log.
 
     Raises:
-        HTTPException (400): If the parking space is already occupied or the place number is invalid.
+        HTTPException (400): If there is no free parking space.
     """
     return await Service.add_parking_space_log(
-        place_number=body.place_number,
         first_name=body.first_name,
         last_name=body.last_name,
         car_make=body.car_make,

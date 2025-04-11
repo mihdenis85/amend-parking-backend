@@ -8,11 +8,6 @@ class AddParkingSpaceLogSchema(BaseModel):
 
     model_config = ConfigDict(use_attribute_docstrings=True)
 
-    place_number: int
-    """
-    The place number of the parking space.
-    """
-
     first_name: str
     """
     The first name of the person.
